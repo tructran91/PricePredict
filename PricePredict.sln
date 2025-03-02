@@ -1,0 +1,93 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{25715192-06E0-438A-8C1D-6F988BF188E6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataImport", "DataImport", "{6331CF52-667D-406B-A3C6-55C23E01EE9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataImport.API", "Services\DataImport\DataImport.API\DataImport.API.csproj", "{64E25F67-624F-4E42-A5FF-1F145043DFDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataImport.Application", "Services\DataImport\DataImport.Application\DataImport.Application.csproj", "{6D9303EA-4271-4B0D-BF76-3F12DC2DFBAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataImport.Infrastructure", "Services\DataImport\DataImport.Infrastructure\DataImport.Infrastructure.csproj", "{44FB2531-707A-40A2-9B1A-84EAFA5A2A99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataImport.Core", "Services\DataImport\DataImport.Core\DataImport.Core.csproj", "{8B1B68E9-1521-4829-A5B3-F3152A9EB6C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{A77433B2-204D-4C80-8524-1E396D335451}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PricePredict.Shared", "Shared\PricePredict.Shared\PricePredict.Shared.csproj", "{18E6E95F-6533-448B-B203-0A3AC612B2C2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{A60DBAC0-4FAB-4C35-B5F8-70F81A8DCAED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PricePrediction", "PricePrediction", "{86C578D2-D3A1-4CAF-8D35-2D3E09F1F37D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PricePrediction.Application", "Services\PricePrediction\PricePrediction.Application\PricePrediction.Application.csproj", "{003E7B1D-E2B9-47E7-BC6F-43B7E17F607E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PricePrediction.Infrastructure", "Services\PricePrediction\PricePrediction.Infrastructure\PricePrediction.Infrastructure.csproj", "{AE6B8157-F4EA-4561-91E5-288D6A54A9D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PricePrediction.Core", "Services\PricePrediction\PricePrediction.Core\PricePrediction.Core.csproj", "{674DF02E-8E2B-4D2A-9271-D31E361F7726}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PricePrediction.API", "Services\PricePrediction\PricePrediction.API\PricePrediction.API.csproj", "{D93AC9C7-B401-4CD5-8E08-7D966603EC98}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{64E25F67-624F-4E42-A5FF-1F145043DFDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64E25F67-624F-4E42-A5FF-1F145043DFDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64E25F67-624F-4E42-A5FF-1F145043DFDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64E25F67-624F-4E42-A5FF-1F145043DFDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D9303EA-4271-4B0D-BF76-3F12DC2DFBAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D9303EA-4271-4B0D-BF76-3F12DC2DFBAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D9303EA-4271-4B0D-BF76-3F12DC2DFBAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D9303EA-4271-4B0D-BF76-3F12DC2DFBAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44FB2531-707A-40A2-9B1A-84EAFA5A2A99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44FB2531-707A-40A2-9B1A-84EAFA5A2A99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44FB2531-707A-40A2-9B1A-84EAFA5A2A99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44FB2531-707A-40A2-9B1A-84EAFA5A2A99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B1B68E9-1521-4829-A5B3-F3152A9EB6C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B1B68E9-1521-4829-A5B3-F3152A9EB6C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B1B68E9-1521-4829-A5B3-F3152A9EB6C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B1B68E9-1521-4829-A5B3-F3152A9EB6C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18E6E95F-6533-448B-B203-0A3AC612B2C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18E6E95F-6533-448B-B203-0A3AC612B2C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18E6E95F-6533-448B-B203-0A3AC612B2C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18E6E95F-6533-448B-B203-0A3AC612B2C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{003E7B1D-E2B9-47E7-BC6F-43B7E17F607E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{003E7B1D-E2B9-47E7-BC6F-43B7E17F607E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{003E7B1D-E2B9-47E7-BC6F-43B7E17F607E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{003E7B1D-E2B9-47E7-BC6F-43B7E17F607E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE6B8157-F4EA-4561-91E5-288D6A54A9D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE6B8157-F4EA-4561-91E5-288D6A54A9D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE6B8157-F4EA-4561-91E5-288D6A54A9D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE6B8157-F4EA-4561-91E5-288D6A54A9D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{674DF02E-8E2B-4D2A-9271-D31E361F7726}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{674DF02E-8E2B-4D2A-9271-D31E361F7726}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{674DF02E-8E2B-4D2A-9271-D31E361F7726}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{674DF02E-8E2B-4D2A-9271-D31E361F7726}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D93AC9C7-B401-4CD5-8E08-7D966603EC98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D93AC9C7-B401-4CD5-8E08-7D966603EC98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D93AC9C7-B401-4CD5-8E08-7D966603EC98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D93AC9C7-B401-4CD5-8E08-7D966603EC98}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6331CF52-667D-406B-A3C6-55C23E01EE9F} = {25715192-06E0-438A-8C1D-6F988BF188E6}
+		{64E25F67-624F-4E42-A5FF-1F145043DFDA} = {6331CF52-667D-406B-A3C6-55C23E01EE9F}
+		{6D9303EA-4271-4B0D-BF76-3F12DC2DFBAB} = {6331CF52-667D-406B-A3C6-55C23E01EE9F}
+		{44FB2531-707A-40A2-9B1A-84EAFA5A2A99} = {6331CF52-667D-406B-A3C6-55C23E01EE9F}
+		{8B1B68E9-1521-4829-A5B3-F3152A9EB6C7} = {6331CF52-667D-406B-A3C6-55C23E01EE9F}
+		{18E6E95F-6533-448B-B203-0A3AC612B2C2} = {A77433B2-204D-4C80-8524-1E396D335451}
+		{86C578D2-D3A1-4CAF-8D35-2D3E09F1F37D} = {25715192-06E0-438A-8C1D-6F988BF188E6}
+		{003E7B1D-E2B9-47E7-BC6F-43B7E17F607E} = {86C578D2-D3A1-4CAF-8D35-2D3E09F1F37D}
+		{AE6B8157-F4EA-4561-91E5-288D6A54A9D9} = {86C578D2-D3A1-4CAF-8D35-2D3E09F1F37D}
+		{674DF02E-8E2B-4D2A-9271-D31E361F7726} = {86C578D2-D3A1-4CAF-8D35-2D3E09F1F37D}
+		{D93AC9C7-B401-4CD5-8E08-7D966603EC98} = {86C578D2-D3A1-4CAF-8D35-2D3E09F1F37D}
+	EndGlobalSection
+EndGlobal
