@@ -13,31 +13,31 @@ namespace DataImport.Infrastructure.Services
             _httpClient = httpClient;
         }
 
-        public async Task<List<Candlestick>> GetCandlestickDataAsync(string symbol, string timeframe)
+        public async Task<List<Candlestick>> GetCandlestickDataAsync(string symbol, string timeframe, DateTime startDate, DateTime endDate)
         {
-            string url = $"https://api.binance.com/api/v3/klines?symbol={symbol}&interval={timeframe}";
-            var response = await _httpClient.GetStringAsync(url);
+            var startTime = new DateTimeOffset(startDate).ToUnixTimeMilliseconds();
+            var endTime = new DateTimeOffset(endDate).ToUnixTimeMilliseconds();
+            var url = $"https://api.binance.com/api/v3/klines?symbol={symbol}&interval={timeframe}&startTime={startTime}&endTime={endTime}&limit=500";
 
-            using (JsonDocument document = JsonDocument.Parse(response))
+            var response = await _httpClient.GetStringAsync(url);
+            using var document = JsonDocument.Parse(response);
+
+            var candles = document.RootElement.EnumerateArray().Select(element => new Candlestick
             {
-                var candles = new List<Candlestick>();
-                foreach (JsonElement element in document.RootElement.EnumerateArray())
-                {
-                    var candle = new Candlestick
-                    {
-                        Symbol = symbol,
-                        Timeframe = timeframe,
-                        Timestamp = DateTimeOffset.FromUnixTimeMilliseconds(element[0].GetInt64()).UtcDateTime,
-                        OpenPrice = decimal.Parse(element[1].GetString()),
-                        HighPrice = decimal.Parse(element[2].GetString()),
-                        LowPrice = decimal.Parse(element[3].GetString()),
-                        ClosePrice = decimal.Parse(element[4].GetString()),
-                        Volume = decimal.Parse(element[5].GetString())
-                    };
-                    candles.Add(candle);
-                }
-                return candles.OrderBy(c => c.Timestamp).ToList();
-            }
+                Symbol = symbol,
+                Timeframe = timeframe,
+                Timestamp = DateTimeOffset.FromUnixTimeMilliseconds(element[0].GetInt64()).UtcDateTime,
+                OpenPrice = decimal.Parse(element[1].GetString()!),
+                HighPrice = decimal.Parse(element[2].GetString()!),
+                LowPrice = decimal.Parse(element[3].GetString()!),
+                ClosePrice = decimal.Parse(element[4].GetString()!),
+                Volume = decimal.Parse(element[5].GetString()!)
+            })
+                .OrderBy(c => c.Timestamp)
+                .DistinctBy(c => c.Timestamp)
+                .ToList();
+
+            return candles;
         }
     }
 }

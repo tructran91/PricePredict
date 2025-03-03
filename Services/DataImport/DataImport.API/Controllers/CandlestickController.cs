@@ -32,14 +32,8 @@ namespace DataImport.API.Controllers
         }
 
         [HttpPost("stock-data-api")]
-        public async Task<IActionResult> ImportStockDataFromApi([FromQuery] string symbol, [FromQuery] string timeframe)
+        public async Task<IActionResult> ImportStockDataFromApi([FromQuery] ImportCandlestickFromApiRequest request)
         {
-            var request = new ImportCandlestickFromApiRequest
-            {
-                Symbol = symbol,
-                Timeframe = timeframe
-            };
-
             var result = await _mediator.Send(new ImportCandlestickFromApiCommand(request));
             return Ok(result);
         }

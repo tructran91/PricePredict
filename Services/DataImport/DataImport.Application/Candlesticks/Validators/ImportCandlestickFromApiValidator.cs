@@ -12,11 +12,6 @@ namespace DataImport.Application.Candlesticks.Validators
                 .NotNull().WithMessage(ValidationMessages.NotNullOrEmpty("Symbol"))
                 .NotEmpty().WithMessage(ValidationMessages.NotNullOrEmpty("Symbol"))
                 .Must(symbol => CandlestickSetting.ValidSymbols.Contains(symbol)).WithMessage("Invalid symbol.");
-
-            RuleFor(x => x.Payload.Timeframe)
-                .NotNull().WithMessage(ValidationMessages.NotNullOrEmpty("Timeframe"))
-                .NotEmpty().WithMessage(ValidationMessages.NotNullOrEmpty("Timeframe"))
-                .Must(timeframe => CandlestickSetting.ValidTimeframes.Contains(timeframe)).WithMessage("Invalid timeframe.");
         }
     }
 }

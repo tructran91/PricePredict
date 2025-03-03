@@ -14,5 +14,7 @@
         public decimal ClosePrice { get; set; } // Giá đóng cửa
 
         public decimal Volume { get; set; } // Khối lượng giao dịch
+
+        public long GetUnixTimestamp() => new DateTimeOffset(Timestamp).ToUnixTimeMilliseconds();
     }
 }

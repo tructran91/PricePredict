@@ -13,13 +13,13 @@ namespace DataImport.Application.Candlesticks.Handlers
 {
     public class ImportCandlestickFromApiHandler : IRequestHandler<ImportCandlestickFromApiCommand, BaseResponse<List<CandlestickResponse>>>
     {
-        private readonly IBaseRepository<Candlestick> _repository;
+        private readonly ICandlestickRepository _repository;
         private readonly IMarketDataService _marketDataService;
         private readonly ILogger<ImportCandlestickFromApiHandler> _logger;
         private readonly IMapper _mapper;
 
         public ImportCandlestickFromApiHandler(
-            IBaseRepository<Candlestick> repository,
+            ICandlestickRepository repository,
             IMarketDataService marketDataService,
             ILogger<ImportCandlestickFromApiHandler> logger,
             IMapper mapper)
@@ -36,18 +36,55 @@ namespace DataImport.Application.Candlesticks.Handlers
             {
                 _logger.LogInformation($"{nameof(ImportCandlestickFromApiHandler)}: {JsonSerializer.Serialize(request.Payload)}");
 
-                var candles = await _marketDataService.GetCandlestickDataAsync(request.Payload.Symbol, request.Payload.Timeframe);
+                var symbol = request.Payload.Symbol;
+                var startTime = request.Payload.Date.Date.ToUniversalTime();
+                var endTime = startTime.AddDays(1);
 
-                if (candles == null || candles.Count == 0)
+                var lastStoredCandle = await _repository.GetAsync(
+                    predicate: t=> t.Symbol == symbol && t.Timestamp >= startTime && t.Timestamp <= endTime,
+                    orderBy: x=> x.OrderByDescending(y => y.Timestamp),
+                    pageSize: 1);
+                if (lastStoredCandle != null && lastStoredCandle.Count > 0)
                 {
-                    _logger.LogError($"{nameof(ImportCandlestickFromApiHandler)}: Cannot retrieve candlestick data.");
-                    return BaseResponse<List<CandlestickResponse>>.Failure("Cannot retrieve candlestick data.");
+                    startTime = lastStoredCandle.First().Timestamp.AddMinutes(1);
                 }
 
-                var createdSticks =  await _repository.AddRangeAsync(candles);
-                var response = _mapper.Map<List<CandlestickResponse>>(createdSticks);
+                var allCandlesFromAPI = new List<Candlestick>();
 
-                return BaseResponse<List<CandlestickResponse>>.Success(response);
+                while (startTime < endTime)
+                {
+                    var candles = await _marketDataService.GetCandlestickDataAsync(symbol, "1m", startTime, endTime);
+                    if (!candles.Any()) break;
+
+                    // Prevent Data return from API is not in the range of requested time
+                    candles = candles.Where(c => c.Timestamp >= startTime && c.Timestamp < endTime).ToList();
+
+                    allCandlesFromAPI.AddRange(candles);
+                    startTime = candles.Max(c => c.Timestamp).AddMinutes(1);
+
+                    if (!allCandlesFromAPI.Any())
+                    {
+                        return BaseResponse<List<CandlestickResponse>>.Failure("Cannot retrieve candlestick data.");
+                    }
+                }
+
+                if (!allCandlesFromAPI.Any())
+                {
+                    return BaseResponse<List<CandlestickResponse>>.Success(new List<CandlestickResponse>(), "No new data.");
+                }
+
+                var existingCandles = await _repository.GetCandlesticksAsync(symbol, "1m", request.Payload.Date.ToUniversalTime(), endTime);
+                var newCandles = allCandlesFromAPI.ExceptBy(existingCandles.Select(ec => ec.Timestamp), c => c.Timestamp).ToList();
+                if (newCandles.Any())
+                {
+                    var createdSticks = await _repository.AddRangeAsync(newCandles);
+                    var response = _mapper.Map<List<CandlestickResponse>>(createdSticks);
+                    return BaseResponse<List<CandlestickResponse>>.Success(response);
+                }
+                else
+                {
+                    return BaseResponse<List<CandlestickResponse>>.Success(new List<CandlestickResponse>(), "No new data.");
+                }
             }
             catch (Exception ex)
             {

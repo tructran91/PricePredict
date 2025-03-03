@@ -4,6 +4,6 @@
     {
         public string Symbol { get; set; }
 
-        public string Timeframe { get; set; }
+        public DateTime Date { get; set; }
     }
 }
