@@ -75,16 +75,14 @@ namespace DataImport.Application.Candlesticks.Handlers
 
                 var existingCandles = await _repository.GetCandlesticksAsync(symbol, "1m", request.Payload.Date.ToUniversalTime(), endTime);
                 var newCandles = allCandlesFromAPI.ExceptBy(existingCandles.Select(ec => ec.Timestamp), c => c.Timestamp).ToList();
-                if (newCandles.Any())
-                {
-                    var createdSticks = await _repository.AddRangeAsync(newCandles);
-                    var response = _mapper.Map<List<CandlestickResponse>>(createdSticks);
-                    return BaseResponse<List<CandlestickResponse>>.Success(response);
-                }
-                else
+                if (!newCandles.Any())
                 {
                     return BaseResponse<List<CandlestickResponse>>.Success(new List<CandlestickResponse>(), "No new data.");
                 }
+
+                var createdSticks = await _repository.AddRangeAsync(newCandles);
+                var response = _mapper.Map<List<CandlestickResponse>>(createdSticks);
+                return BaseResponse<List<CandlestickResponse>>.Success(response);
             }
             catch (Exception ex)
             {

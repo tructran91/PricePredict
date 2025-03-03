@@ -9,6 +9,6 @@ namespace PricePrediction.Infrastructure.Data
         {
         }
 
-        public DbSet<StockPrice> StockPrices { get; set; }
+        public DbSet<Candlestick> Candlesticks { get; set; }
     }
 }
