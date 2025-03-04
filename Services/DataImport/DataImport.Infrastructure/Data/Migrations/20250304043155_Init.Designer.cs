@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataImport.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(PricePredictContext))]
-    [Migration("20250301150119_Init")]
+    [Migration("20250304043155_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -69,8 +69,8 @@ namespace DataImport.Infrastructure.Data.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("Timestamp")
+                        .HasColumnType("datetimeoffset(0)");
 
                     b.Property<decimal>("Volume")
                         .HasColumnType("decimal(18,8)");

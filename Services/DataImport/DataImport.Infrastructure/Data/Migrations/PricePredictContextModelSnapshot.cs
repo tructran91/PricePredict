@@ -66,8 +66,8 @@ namespace DataImport.Infrastructure.Data.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("Timestamp")
+                        .HasColumnType("datetimeoffset(0)");
 
                     b.Property<decimal>("Volume")
                         .HasColumnType("decimal(18,8)");

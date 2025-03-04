@@ -11,7 +11,7 @@ namespace DataImport.Infrastructure.Repositories
         {
         }
 
-        public async Task<List<Candlestick>> GetCandlesticksAsync(string symbol, string timeframe, DateTime startTime, DateTime endTime)
+        public async Task<List<Candlestick>> GetCandlesticksAsync(string symbol, string timeframe, DateTimeOffset startTime, DateTimeOffset endTime)
         {
             if (timeframe.ToLower() == "1m")
             {
@@ -36,7 +36,7 @@ namespace DataImport.Infrastructure.Repositories
                     return new List<Candlestick>();
 
                 var groupedCandlesticks = baseCandlesticks
-                    .GroupBy(p => p.Timestamp.Ticks / timeSpan.Ticks)
+                    .GroupBy(p => p.Timestamp.UtcTicks / timeSpan.Ticks)
                     .Select(group => new Candlestick
                     {
                         Symbol = symbol,

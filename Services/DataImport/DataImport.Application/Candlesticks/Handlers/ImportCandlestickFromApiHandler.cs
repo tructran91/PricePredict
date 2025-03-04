@@ -37,13 +37,15 @@ namespace DataImport.Application.Candlesticks.Handlers
                 _logger.LogInformation($"{nameof(ImportCandlestickFromApiHandler)}: {JsonSerializer.Serialize(request.Payload)}");
 
                 var symbol = request.Payload.Symbol;
-                var startTime = request.Payload.Date.Date.ToUniversalTime();
+                var startTime = new DateTimeOffset(request.Payload.Date.Date, TimeSpan.Zero);
                 var endTime = startTime.AddDays(1);
 
+                // Lấy nến mới nhất đã lưu trong DB để biết lấy từ đâu tiếp
                 var lastStoredCandle = await _repository.GetAsync(
-                    predicate: t=> t.Symbol == symbol && t.Timestamp >= startTime && t.Timestamp <= endTime,
-                    orderBy: x=> x.OrderByDescending(y => y.Timestamp),
-                    pageSize: 1);
+                    predicate: t => t.Symbol == symbol && t.Timestamp >= startTime && t.Timestamp < endTime,
+                    orderBy: x => x.OrderByDescending(y => y.Timestamp),
+                    pageSize: 1
+                );
                 if (lastStoredCandle != null && lastStoredCandle.Count > 0)
                 {
                     startTime = lastStoredCandle.First().Timestamp.AddMinutes(1);

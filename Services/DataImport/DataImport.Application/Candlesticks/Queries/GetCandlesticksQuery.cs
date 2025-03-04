@@ -10,8 +10,8 @@ namespace DataImport.Application.Candlesticks.Queries
 
         public string TargetTimeframe { get; set; }
 
-        public DateTime StartTime { get; set; }
+        public DateTimeOffset StartTime { get; set; }
 
-        public DateTime EndTime { get; set; }
+        public DateTimeOffset EndTime { get; set; }
     }
 }

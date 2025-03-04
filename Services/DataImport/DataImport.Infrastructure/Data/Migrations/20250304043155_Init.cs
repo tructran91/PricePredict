@@ -19,7 +19,7 @@ namespace DataImport.Infrastructure.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Symbol = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Timeframe = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Timestamp = table.Column<DateTimeOffset>(type: "datetimeoffset(0)", nullable: false),
                     OpenPrice = table.Column<decimal>(type: "decimal(18,8)", nullable: false),
                     HighPrice = table.Column<decimal>(type: "decimal(18,8)", nullable: false),
                     LowPrice = table.Column<decimal>(type: "decimal(18,8)", nullable: false),

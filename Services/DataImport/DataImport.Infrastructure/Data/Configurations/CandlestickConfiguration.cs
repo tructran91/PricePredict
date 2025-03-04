@@ -14,7 +14,10 @@ namespace DataImport.Infrastructure.Data.Configurations
 
             builder.Property(c => c.Symbol).HasMaxLength(20).IsRequired();
             builder.Property(c => c.Timeframe).HasMaxLength(10).IsRequired();
-            builder.Property(c => c.Timestamp).IsRequired();
+
+            builder.Property(c => c.Timestamp)
+                .IsRequired()
+                .HasColumnType("datetimeoffset(0)");
 
             builder.Property(c => c.OpenPrice).HasColumnType("decimal(18,8)").IsRequired();
             builder.Property(c => c.HighPrice).HasColumnType("decimal(18,8)").IsRequired();

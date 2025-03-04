@@ -6,7 +6,7 @@
 
         public string Timeframe { get; set; } = string.Empty;
 
-        public DateTime Timestamp { get; set; }
+        public DateTimeOffset Timestamp { get; set; }
 
         public decimal OpenPrice { get; set; }
         public decimal HighPrice { get; set; }
