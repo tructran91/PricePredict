@@ -22,6 +22,60 @@ namespace PricePrediction.Infrastructure.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("PricePrediction.Core.Entities.TradeResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(0);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("ExitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("IndicatorType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsWin")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("PriceAtSignal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Profit")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Signal")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Symbol")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Timeframe")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("TradeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TradeResults");
+                });
+
             modelBuilder.Entity("PricePrediction.Core.Entities.TradeSignal", b =>
                 {
                     b.Property<int>("Id")
@@ -68,10 +122,8 @@ namespace PricePrediction.Infrastructure.Data.Migrations
                     b.Property<DateTimeOffset>("Timestamp")
                         .HasColumnType("datetimeoffset(0)");
 
-                    b.Property<string>("TradeId")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<Guid>("TradeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 

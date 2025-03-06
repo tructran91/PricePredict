@@ -3,42 +3,46 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using PricePredict.Shared.Models;
 using PricePrediction.Application.DTOs;
-using PricePrediction.Application.PredictPrice.Commands;
+using PricePrediction.Application.TradeSignals.Commands;
 using PricePrediction.Application.Responses;
 using PricePrediction.Application.Services;
 using PricePrediction.Core.Entities;
 using PricePrediction.Core.Repositories;
 using System.Text.Json;
+using PricePrediction.Application.TradeResults.Commands;
 
-namespace PricePrediction.Application.PredictPrice.Handler
+namespace PricePrediction.Application.TradeSignals.Handler
 {
-    public class PredictPriceHandler : IRequestHandler<PredictPriceCommand, BaseResponse<List<TradeSignalResponse>>>
+    public class AddTradeSignalsHandler : IRequestHandler<AddTradeSignalsCommand, BaseResponse<List<TradeSignalResponse>>>
     {
         private readonly IBaseRepository<TradeSignal> _repository;
         private readonly ICandlestickService _candlestickService;
+        private readonly IMediator _mediator;
         //private readonly ITradingAnalysisService _tradingAnalysisService;
         private readonly IMapper _mapper;
-        private readonly ILogger<PredictPriceHandler> _logger;
+        private readonly ILogger<AddTradeSignalsHandler> _logger;
 
-        public PredictPriceHandler(
+        public AddTradeSignalsHandler(
             IBaseRepository<TradeSignal> repository,
             ICandlestickService candlestickService,
+            IMediator mediator,
             //ITradingAnalysisService tradingAnalysisService,
             IMapper mapper,
-            ILogger<PredictPriceHandler> logger)
+            ILogger<AddTradeSignalsHandler> logger)
         {
             _repository = repository;
             _candlestickService = candlestickService;
+            _mediator = mediator;
             //_tradingAnalysisService = tradingAnalysisService;
             _mapper = mapper;
             _logger = logger;
         }
 
-        public async Task<BaseResponse<List<TradeSignalResponse>>> Handle(PredictPriceCommand request, CancellationToken cancellationToken)
+        public async Task<BaseResponse<List<TradeSignalResponse>>> Handle(AddTradeSignalsCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                _logger.LogInformation($"{nameof(PredictPriceHandler)}: {JsonSerializer.Serialize(request)}");
+                _logger.LogInformation($"{nameof(AddTradeSignalsHandler)}: {JsonSerializer.Serialize(request)}");
 
                 var candlesticks = await _candlestickService.GetCandlesticksAsync(request.Symbol, request.Timeframe, request.StartDate, request.EndDate);
 
@@ -55,21 +59,47 @@ namespace PricePrediction.Application.PredictPrice.Handler
                 var signals = GenerateTradeSignals(candlesticks, shortMA, longMA);
                 if (signals.Any())
                 {
-                    var signalsEntity = _mapper.Map<List<TradeSignal>>(signals);
-                    signalsEntity.ForEach(s =>
-                    {
-                        s.IndicatorType = $"MA {request.ShortPeriod}-{request.LongPeriod}";
-                        s.Timeframe = request.Timeframe;
-                    });
+                    var indicatorType = $"MA {request.ShortPeriod}-{request.LongPeriod}";
 
-                    await _repository.AddRangeAsync(signalsEntity);
+                    var existingSignals = await _repository.GetAsync(
+                        predicate: t => t.Symbol == request.Symbol &&
+                                        t.Timeframe == request.Timeframe &&
+                                        t.IndicatorType == indicatorType &&
+                                        signals.Select(s => s.Timestamp).Contains(t.Timestamp),
+                        orderBy: x => x.OrderBy(y => y.Timestamp),
+                        pageNumber: 1,
+                        pageSize: 1000);
+
+                    var existingTimestamps = existingSignals.Select(t => t.Timestamp).ToHashSet();
+
+                    var newSignals = signals
+                        .Where(s => !existingTimestamps.Contains(s.Timestamp)) // Lọc ra các signal chưa có trong DB
+                        .ToList();
+
+                    if (newSignals.Any())
+                    {
+                        var signalsEntity = _mapper.Map<List<TradeSignal>>(newSignals);
+                        signalsEntity.ForEach(s =>
+                        {
+                            s.IndicatorType = indicatorType;
+                            s.Timeframe = request.Timeframe;
+                        });
+
+                        await _repository.AddRangeAsync(signalsEntity);
+
+                        // TODO: move to post-processor
+                        await _mediator.Send(new AddTradeResultsCommand
+                        {
+                            TradeSignals = signalsEntity
+                        });
+                    }
                 }
 
                 return BaseResponse<List<TradeSignalResponse>>.Success(signals);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(PredictPriceHandler)}: Error predicting price: {ex.Message}");
+                _logger.LogError($"{nameof(AddTradeSignalsHandler)}: Error predicting price: {ex.Message}");
                 return BaseResponse<List<TradeSignalResponse>>.Failure("Error predicting price.");
             }
         }

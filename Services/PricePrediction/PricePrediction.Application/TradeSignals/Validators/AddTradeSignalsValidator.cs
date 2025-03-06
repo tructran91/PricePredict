@@ -1,15 +1,15 @@
 ﻿using FluentValidation;
 using PricePredict.Shared.Constants;
-using PricePrediction.Application.PredictPrice.Commands;
+using PricePrediction.Application.TradeSignals.Commands;
 
-namespace PricePrediction.Application.PredictPrice.Validators
+namespace PricePrediction.Application.TradeSignals.Validators
 {
-    public class PredictPriceValidator : AbstractValidator<PredictPriceCommand>
+    public class AddTradeSignalsValidator : AbstractValidator<AddTradeSignalsCommand>
     {
         private readonly DateTime _minDate = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         private readonly DateTime _maxFutureDate = DateTime.UtcNow.AddDays(1);
 
-        public PredictPriceValidator()
+        public AddTradeSignalsValidator()
         {
             RuleFor(x => x.Symbol)
                 .NotNull().WithMessage(ValidationMessages.NotNullOrEmpty("Symbol"))

@@ -8,7 +8,8 @@ namespace PricePrediction.Application
     {
         public MappingProfile()
         {
-            CreateMap<TradeSignalResponse, TradeSignal>();
+            CreateMap<TradeSignalResponse, TradeSignal>()
+                .ForMember(dest => dest.TradeId, opt => opt.MapFrom(src => Guid.Parse(src.TradeId)));
         }
     }
 }

@@ -2,10 +2,9 @@
 {
     public class TradeSignal : BaseEntity
     {
-        public string Timeframe { get; set; }
-
+        public Guid TradeId { get; set; }
         public string Symbol { get; set; }
-
+        public string Timeframe { get; set; }
         public DateTimeOffset Timestamp { get; set; }
 
         public string IndicatorType { get; set; }
@@ -17,7 +16,5 @@
         public string Signal { get; set; }
 
         public decimal PriceAtSignal { get; set; }
-
-        public string TradeId { get; set; }
     }
 }
