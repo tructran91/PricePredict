@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataImport.Infrastructure.Data
 {
-    public class PricePredictContext : DbContext
+    public class DataImportContext : DbContext
     {
-        public PricePredictContext(DbContextOptions options) : base(options)
+        public DataImportContext(DbContextOptions options) : base(options)
         {
         }
 
@@ -13,7 +13,7 @@ namespace DataImport.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(PricePredictContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(DataImportContext).Assembly);
 
             base.OnModelCreating(modelBuilder);
         }

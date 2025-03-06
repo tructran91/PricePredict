@@ -9,6 +9,13 @@ namespace PricePrediction.Infrastructure.Data
         {
         }
 
-        public DbSet<Candlestick> Candlesticks { get; set; }
+        public DbSet<TradeSignal> TradeSignals { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(PricePredictContext).Assembly);
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

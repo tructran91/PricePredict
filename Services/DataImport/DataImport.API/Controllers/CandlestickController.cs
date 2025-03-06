@@ -17,21 +17,21 @@ namespace DataImport.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("candlesticks")]
+        [HttpGet]
         public async Task<IActionResult> GetCandlesticks([FromQuery] GetCandlesticksQuery query)
         {
             var result = await _mediator.Send(query);
             return Ok(result);
         }
 
-        [HttpPost("stock-data")]
+        [HttpPost("import-file")]
         public async Task<IActionResult> ImportStockData([FromForm] ImportCandlestickRequest request)
         {
             var result = await _mediator.Send(new ImportCandlestickCommand(request.File));
             return Ok(result);
         }
 
-        [HttpPost("stock-data-api")]
+        [HttpPost("import-api")]
         public async Task<IActionResult> ImportStockDataFromApi([FromQuery] ImportCandlestickFromApiRequest request)
         {
             var result = await _mediator.Send(new ImportCandlestickFromApiCommand(request));

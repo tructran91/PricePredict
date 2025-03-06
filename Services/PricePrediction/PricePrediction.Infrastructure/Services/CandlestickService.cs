@@ -1,6 +1,5 @@
-﻿using PricePredict.Shared.Models;
+﻿using PricePrediction.Application.DTOs;
 using PricePrediction.Application.Services;
-using PricePrediction.Core.Entities;
 
 namespace PricePrediction.Infrastructure.Services
 {
@@ -13,7 +12,7 @@ namespace PricePrediction.Infrastructure.Services
             _candlestickService = candlestickService;
         }
 
-        public async Task<List<Candlestick>> GetCandlesticksAsync(string symbol, string timeframe, DateTime startTime, DateTime endTime)
+        public async Task<List<Candlestick>> GetCandlesticksAsync(string symbol, string timeframe, DateTimeOffset startTime, DateTimeOffset endTime)
         {
             var candles = await _candlestickService.GetCandlesticksAsync(symbol, timeframe, startTime, endTime);
             if (!candles.IsSuccess)

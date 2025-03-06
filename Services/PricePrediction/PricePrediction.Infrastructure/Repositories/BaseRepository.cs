@@ -79,6 +79,13 @@ namespace PricePrediction.Infrastructure.Repositories
             return await query.AnyAsync();
         }
 
+        public async Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities)
+        {
+            await _dbSet.AddRangeAsync(entities);
+            await _dbContext.SaveChangesAsync();
+            return entities;
+        }
+
         public async Task<T> GetByIdAsync(int id)
         {
             return await _dbSet.FirstOrDefaultAsync(t => t.Id == id && !t.IsDeleted);

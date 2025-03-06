@@ -51,7 +51,7 @@ namespace DataImport.API.Extensions
 
         public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<PricePredictContext>(c =>
+            services.AddDbContext<DataImportContext>(c =>
                 c.UseSqlServer(configuration.GetConnectionString("PricePredictConnection")));
             services.AddTransient<ExceptionHandlingMiddleware>();
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));

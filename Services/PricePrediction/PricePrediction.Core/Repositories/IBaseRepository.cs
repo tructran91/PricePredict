@@ -18,6 +18,8 @@ namespace PricePrediction.Core.Repositories
 
         Task<bool> AnyAsync(Expression<Func<T, bool>> predicate = null, bool isDeletedIncluded = false);
 
+        Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities);
+
         Task<T> GetByIdAsync(int id);
 
         Task<T> AddAsync(T entity);

@@ -14,11 +14,11 @@ namespace PricePrediction.Application.PredictPrice.Commands
 
         public int LongPeriod { get; set; }
 
-        public DateTime StartDate { get; set; }
+        public DateTimeOffset StartDate { get; set; }
 
-        public DateTime EndDate { get; set; }
+        public DateTimeOffset EndDate { get; set; }
 
-        public PredictPriceCommand(string symbol, string timeframe, int shortPeriod, int longPeriod, DateTime startDate, DateTime endDate)
+        public PredictPriceCommand(string symbol, string timeframe, int shortPeriod, int longPeriod, DateTimeOffset startDate, DateTimeOffset endDate)
         {
             Symbol = symbol;
             Timeframe = timeframe;

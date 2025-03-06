@@ -7,7 +7,7 @@ namespace DataImport.Infrastructure.Repositories
 {
     public class CandlestickRepository : BaseRepository<Candlestick>, ICandlestickRepository
     {
-        public CandlestickRepository(PricePredictContext dbContext) : base(dbContext)
+        public CandlestickRepository(DataImportContext dbContext) : base(dbContext)
         {
         }
 
@@ -17,7 +17,7 @@ namespace DataImport.Infrastructure.Repositories
             {
                 var query = _dbContext.Candlesticks
                     .Where(p => p.Symbol == symbol && p.Timestamp >= startTime && p.Timestamp <= endTime)
-                    .OrderBy(p => p.Timestamp)
+                    .OrderByDescending(p => p.Timestamp)
                     .AsNoTracking();
 
                 return await query.ToListAsync();
@@ -28,7 +28,7 @@ namespace DataImport.Infrastructure.Repositories
 
                 var baseCandlesticks = await _dbContext.Candlesticks
                     .Where(p => p.Symbol == symbol && p.Timestamp >= startTime && p.Timestamp <= endTime)
-                    .OrderBy(p => p.Timestamp)
+                    .OrderByDescending(p => p.Timestamp)
                     .AsNoTracking()
                     .ToListAsync();
 

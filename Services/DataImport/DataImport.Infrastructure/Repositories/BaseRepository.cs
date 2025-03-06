@@ -9,10 +9,10 @@ namespace DataImport.Infrastructure.Repositories
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
     {
-        protected readonly PricePredictContext _dbContext;
+        protected readonly DataImportContext _dbContext;
         private DbSet<T> _dbSet;
 
-        public BaseRepository(PricePredictContext dbContext)
+        public BaseRepository(DataImportContext dbContext)
         {
             _dbContext = dbContext;
             _dbSet = _dbContext.Set<T>();
