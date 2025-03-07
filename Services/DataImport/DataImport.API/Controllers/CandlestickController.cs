@@ -24,12 +24,12 @@ namespace DataImport.API.Controllers
             return Ok(result);
         }
 
-        [HttpPost("import-file")]
-        public async Task<IActionResult> ImportStockData([FromForm] ImportCandlestickRequest request)
-        {
-            var result = await _mediator.Send(new ImportCandlestickCommand(request.File));
-            return Ok(result);
-        }
+        //[HttpPost("import-file")]
+        //public async Task<IActionResult> ImportStockData([FromForm] ImportCandlestickRequest request)
+        //{
+        //    var result = await _mediator.Send(new ImportCandlestickCommand(request.File));
+        //    return Ok(result);
+        //}
 
         [HttpPost("import-api")]
         public async Task<IActionResult> ImportStockDataFromApi([FromQuery] ImportCandlestickFromApiRequest request)

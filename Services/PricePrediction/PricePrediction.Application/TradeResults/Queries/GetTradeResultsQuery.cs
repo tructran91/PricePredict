@@ -8,10 +8,12 @@ namespace PricePrediction.Application.TradeResults.Queries
     {
         public string Symbol { get; set; }
 
-        //public string Timeframe { get; set; }
+        public string? Timeframe { get; set; }
 
-        //public DateTimeOffset Timestamp { get; set; }
+        public DateTimeOffset? StartDateTime { get; set; }
 
-        //public string IndicatorType { get; set; }
+        public DateTimeOffset? EndDateTime { get; set; }
+
+        public string? IndicatorType { get; set; }
     }
 }

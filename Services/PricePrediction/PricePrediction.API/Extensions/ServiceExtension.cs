@@ -56,6 +56,8 @@ namespace PricePrediction.API.Extensions
                 c.UseSqlServer(configuration.GetConnectionString("PricePredictConnection")));
             services.AddTransient<ExceptionHandlingMiddleware>();
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            services.AddScoped<ITradeSignalRepository, TradeSignalRepository>();
+            services.AddScoped<ITradeResultRepository, TradeResultRepository>();
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         }
 

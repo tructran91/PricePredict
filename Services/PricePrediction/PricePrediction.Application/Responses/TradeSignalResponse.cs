@@ -15,5 +15,7 @@
         public string Signal { get; set; }
 
         public string TradeId { get; set; }
+
+        public string IndicatorType { get; set; }
     }
 }

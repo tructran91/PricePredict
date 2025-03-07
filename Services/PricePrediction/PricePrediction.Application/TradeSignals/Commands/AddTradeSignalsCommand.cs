@@ -14,8 +14,8 @@ namespace PricePrediction.Application.TradeSignals.Commands
 
         public int LongPeriod { get; set; }
 
-        public DateTimeOffset StartDate { get; set; }
+        public DateTimeOffset StartDateTime { get; set; }
 
-        public DateTimeOffset EndDate { get; set; }
+        public DateTimeOffset EndDateTime { get; set; }
     }
 }

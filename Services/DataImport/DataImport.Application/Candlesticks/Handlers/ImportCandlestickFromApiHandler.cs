@@ -43,8 +43,7 @@ namespace DataImport.Application.Candlesticks.Handlers
                 // Lấy nến mới nhất đã lưu trong DB để biết lấy từ đâu tiếp
                 var lastStoredCandle = await _repository.GetAsync(
                     predicate: t => t.Symbol == symbol && t.Timestamp >= startTime && t.Timestamp < endTime,
-                    orderBy: x => x.OrderByDescending(y => y.Timestamp),
-                    pageSize: 1
+                    orderBy: x => x.OrderByDescending(y => y.Timestamp)
                 );
                 if (lastStoredCandle != null && lastStoredCandle.Count > 0)
                 {

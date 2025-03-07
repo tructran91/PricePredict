@@ -12,7 +12,7 @@ using PricePrediction.Infrastructure.Data;
 namespace PricePrediction.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(PricePredictContext))]
-    [Migration("20250306080307_Init")]
+    [Migration("20250307082034_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -35,10 +35,12 @@ namespace PricePrediction.Infrastructure.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<decimal>("ExitPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<string>("IndicatorType")
                         .IsRequired()
@@ -51,13 +53,15 @@ namespace PricePrediction.Infrastructure.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<decimal>("PriceAtSignal")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<decimal>("Profit")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<string>("Signal")
                         .IsRequired()
@@ -65,11 +69,16 @@ namespace PricePrediction.Infrastructure.Data.Migrations
 
                     b.Property<string>("Symbol")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Timeframe")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<DateTimeOffset>("Timestamp")
+                        .HasColumnType("datetimeoffset(0)");
 
                     b.Property<Guid>("TradeId")
                         .HasColumnType("uniqueidentifier");

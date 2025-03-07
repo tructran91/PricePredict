@@ -11,12 +11,12 @@ namespace DataImport.Infrastructure.Repositories
         {
         }
 
-        public async Task<List<Candlestick>> GetCandlesticksAsync(string symbol, string timeframe, DateTimeOffset startTime, DateTimeOffset endTime)
+        public async Task<List<Candlestick>> GetCandlesticksAsync(string symbol, string timeframe, DateTimeOffset startDateTime, DateTimeOffset endDateTime)
         {
             if (timeframe.ToLower() == "1m")
             {
                 var query = _dbContext.Candlesticks
-                    .Where(p => p.Symbol == symbol && p.Timestamp >= startTime && p.Timestamp <= endTime)
+                    .Where(p => p.Symbol == symbol && p.Timestamp >= startDateTime && p.Timestamp <= endDateTime)
                     .OrderByDescending(p => p.Timestamp)
                     .AsNoTracking();
 
@@ -27,7 +27,7 @@ namespace DataImport.Infrastructure.Repositories
                 var timeSpan = ParseTimeframe(timeframe);
 
                 var baseCandlesticks = await _dbContext.Candlesticks
-                    .Where(p => p.Symbol == symbol && p.Timestamp >= startTime && p.Timestamp <= endTime)
+                    .Where(p => p.Symbol == symbol && p.Timestamp >= startDateTime && p.Timestamp <= endDateTime)
                     .OrderByDescending(p => p.Timestamp)
                     .AsNoTracking()
                     .ToListAsync();

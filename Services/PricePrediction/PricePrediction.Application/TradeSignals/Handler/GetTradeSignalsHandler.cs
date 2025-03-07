@@ -1,20 +1,23 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using PricePredict.Shared.Models;
+using PricePrediction.Application.Responses;
 using PricePrediction.Application.TradeSignals.Queries;
 using PricePrediction.Core.Entities;
 using PricePrediction.Core.Repositories;
+using System.Text.Json;
 
 namespace PricePrediction.Application.TradeSignals.Handler
 {
-    public class GetTradeSignalsHandler : IRequestHandler<GetTradeSignalsQuery, List<TradeSignal>>
+    public class GetTradeSignalsHandler : IRequestHandler<GetTradeSignalsQuery, BaseResponse<List<TradeSignalResponse>>>
     {
-        private readonly IBaseRepository<TradeSignal> _repository;
+        private readonly ITradeSignalRepository _repository;
         private readonly IMapper _mapper;
         private readonly ILogger<GetTradeSignalsHandler> _logger;
 
         public GetTradeSignalsHandler(
-            IBaseRepository<TradeSignal> repository,
+            ITradeSignalRepository repository,
             IMapper mapper,
             ILogger<GetTradeSignalsHandler> logger)
         {
@@ -23,15 +26,20 @@ namespace PricePrediction.Application.TradeSignals.Handler
             _logger = logger;
         }
 
-        public async Task<List<TradeSignal>> Handle(GetTradeSignalsQuery request, CancellationToken cancellationToken)
+        public async Task<BaseResponse<List<TradeSignalResponse>>> Handle(GetTradeSignalsQuery request, CancellationToken cancellationToken)
         {
-            var signals = await _repository.GetAsync(
-                predicate: t => t.Symbol == request.Symbol && t.Timeframe == request.Timeframe && t.Timestamp == request.Timestamp && t.IndicatorType == request.IndicatorType,
-                orderBy: x => x.OrderBy(y => y.Timestamp),
-                pageNumber: 1,
-                pageSize: 1000);
+            _logger.LogInformation($"{nameof(GetTradeSignalsHandler)}: {JsonSerializer.Serialize(request)}");
 
-            return signals.ToList();
+            var signals = await _repository.GetTradeSignalsAsync(
+                request.Symbol,
+                request.Timeframe,
+                request.StartDateTime,
+                request.EndDateTime,
+                request.IndicatorType);
+
+            var response = _mapper.Map<List<TradeSignalResponse>>(signals);
+
+            return BaseResponse<List<TradeSignalResponse>>.Success(response);
         }
     }
 }

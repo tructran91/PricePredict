@@ -12,9 +12,9 @@ namespace PricePrediction.Infrastructure.Services
             _candlestickService = candlestickService;
         }
 
-        public async Task<List<Candlestick>> GetCandlesticksAsync(string symbol, string timeframe, DateTimeOffset startTime, DateTimeOffset endTime)
+        public async Task<List<Candlestick>> GetCandlesticksAsync(string symbol, string timeframe, DateTimeOffset startDateTime, DateTimeOffset endDateTime)
         {
-            var candles = await _candlestickService.GetCandlesticksAsync(symbol, timeframe, startTime, endTime);
+            var candles = await _candlestickService.GetCandlesticksAsync(symbol, timeframe, startDateTime, endDateTime);
             if (!candles.IsSuccess)
             {
                 return new List<Candlestick>();

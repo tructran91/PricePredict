@@ -5,6 +5,7 @@
         public Guid TradeId { get; set; } // Liên kết với TradeSignal
         public string Symbol { get; set; }
         public string Timeframe { get; set; }
+        public DateTimeOffset Timestamp { get; set; }
         public string IndicatorType { get; set; } // SMA, EMA, MACD, RSI...
 
         public string Signal { get; set; } // BUY, SHORT

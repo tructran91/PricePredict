@@ -47,6 +47,7 @@ namespace PricePrediction.Application.TradeResults.Handlers
                         TradeId = entrySignal.TradeId,
                         Symbol = entrySignal.Symbol,
                         Timeframe = entrySignal.Timeframe,
+                        Timestamp = entrySignal.Timestamp,
                         IndicatorType = entrySignal.IndicatorType,
                         Signal = entrySignal.Signal,
                         PriceAtSignal = entrySignal.PriceAtSignal,

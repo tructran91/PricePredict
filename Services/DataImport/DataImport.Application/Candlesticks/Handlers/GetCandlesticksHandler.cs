@@ -20,10 +20,10 @@ namespace DataImport.Application.Candlesticks.Handlers
 
         public async Task<BaseResponse<List<CandlestickResponse>>> Handle(GetCandlesticksQuery request, CancellationToken cancellationToken)
         {
-            var startTimeUtc = request.StartTime.UtcDateTime;
-            var endTimeUtc = request.EndTime.UtcDateTime;
+            var startDateTimeUtc = request.StartDateTime.UtcDateTime;
+            var endDateTimeUtc = request.EndDateTime.UtcDateTime;
 
-            var candles = await _repository.GetCandlesticksAsync(request.Symbol, request.TargetTimeframe, startTimeUtc, endTimeUtc);
+            var candles = await _repository.GetCandlesticksAsync(request.Symbol, request.TargetTimeframe, startDateTimeUtc, endDateTimeUtc);
 
             var timeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
 

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PricePredict.Shared.Constants;
 using PricePrediction.Core.Entities;
 using PricePrediction.Core.Repositories;
 using PricePrediction.Infrastructure.Data;
@@ -31,8 +30,6 @@ namespace PricePrediction.Infrastructure.Repositories
             Expression<Func<T, bool>> predicate = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             string includeString = null,
-            int pageNumber = PaginationSetting.DefaultCurrentPage,
-            int pageSize = PaginationSetting.DefaultPageSize,
             bool disableTracking = true)
         {
             IQueryable<T> query = _dbSet;
@@ -47,8 +44,6 @@ namespace PricePrediction.Infrastructure.Repositories
                 query = query.Where(predicate);
 
             query = orderBy != null ? orderBy(query) : query.OrderBy(x => x.CreatedDate);
-
-            query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
 
             return await query.ToListAsync();
         }

@@ -13,9 +13,9 @@ namespace DataImport.Infrastructure.Services
             _httpClient = httpClient;
         }
 
-        public async Task<List<Candlestick>> GetCandlestickDataAsync(string symbol, string timeframe, DateTimeOffset startDate, DateTimeOffset endDate)
+        public async Task<List<Candlestick>> GetCandlestickDataAsync(string symbol, string timeframe, DateTimeOffset startDateTime, DateTimeOffset endDateTime)
         {
-            var url = BuildBinanceUrl(symbol, timeframe, startDate, endDate);
+            var url = BuildBinanceUrl(symbol, timeframe, startDateTime, endDateTime);
             var response = await _httpClient.GetStringAsync(url);
             using var document = JsonDocument.Parse(response);
 
@@ -37,10 +37,10 @@ namespace DataImport.Infrastructure.Services
             return candles;
         }
 
-        private static string BuildBinanceUrl(string symbol, string timeframe, DateTimeOffset startDate, DateTimeOffset endDate)
+        private static string BuildBinanceUrl(string symbol, string timeframe, DateTimeOffset startDateTime, DateTimeOffset endDateTime)
         {
-            var startTime = startDate.ToUnixTimeMilliseconds();
-            var endTime = endDate.ToUnixTimeMilliseconds();
+            var startTime = startDateTime.ToUnixTimeMilliseconds();
+            var endTime = endDateTime.ToUnixTimeMilliseconds();
             return $"https://api.binance.com/api/v3/klines?symbol={symbol}&interval={timeframe}&startTime={startTime}&endTime={endTime}&limit=500";
         }
 

@@ -10,6 +10,8 @@ namespace PricePrediction.Application
         {
             CreateMap<TradeSignalResponse, TradeSignal>()
                 .ForMember(dest => dest.TradeId, opt => opt.MapFrom(src => Guid.Parse(src.TradeId)));
+
+            CreateMap<TradeSignal, TradeSignalResponse>();
         }
     }
 }

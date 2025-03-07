@@ -21,13 +21,13 @@ namespace PricePrediction.Application.TradeSignals.Validators
                 .NotEmpty().WithMessage(ValidationMessages.NotNullOrEmpty("Timeframe"))
                 .Must(timeframe => CandlestickSetting.ValidTimeframes.Contains(timeframe)).WithMessage("Invalid timeframe.");
 
-            RuleFor(x => x.StartDate)
+            RuleFor(x => x.StartDateTime)
                 .NotNull().WithMessage(ValidationMessages.NotNullOrEmpty("StartTime"))
                 .NotEmpty().WithMessage(ValidationMessages.NotNullOrEmpty("StartTime"))
                 .GreaterThanOrEqualTo(_minDate).WithMessage($"StartTime must be after {_minDate:yyyy-MM-dd}.")
-                .LessThanOrEqualTo(x => x.EndDate).WithMessage("StartTime must be before or equal to end date.");
+                .LessThanOrEqualTo(x => x.EndDateTime).WithMessage("StartTime must be before or equal to end date.");
 
-            RuleFor(x => x.EndDate)
+            RuleFor(x => x.EndDateTime)
                 .NotNull().WithMessage(ValidationMessages.NotNullOrEmpty("EndTime"))
                 .NotEmpty().WithMessage(ValidationMessages.NotNullOrEmpty("EndTime"))
                 .LessThanOrEqualTo(_maxFutureDate).WithMessage("EndTime cannot exceed 1 day in the future.");

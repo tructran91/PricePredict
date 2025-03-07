@@ -15,7 +15,7 @@ namespace PricePrediction.Application.TradeSignals.Handler
 {
     public class AddTradeSignalsHandler : IRequestHandler<AddTradeSignalsCommand, BaseResponse<List<TradeSignalResponse>>>
     {
-        private readonly IBaseRepository<TradeSignal> _repository;
+        private readonly ITradeSignalRepository _repository;
         private readonly ICandlestickService _candlestickService;
         private readonly IMediator _mediator;
         //private readonly ITradingAnalysisService _tradingAnalysisService;
@@ -23,7 +23,7 @@ namespace PricePrediction.Application.TradeSignals.Handler
         private readonly ILogger<AddTradeSignalsHandler> _logger;
 
         public AddTradeSignalsHandler(
-            IBaseRepository<TradeSignal> repository,
+            ITradeSignalRepository repository,
             ICandlestickService candlestickService,
             IMediator mediator,
             //ITradingAnalysisService tradingAnalysisService,
@@ -44,7 +44,7 @@ namespace PricePrediction.Application.TradeSignals.Handler
             {
                 _logger.LogInformation($"{nameof(AddTradeSignalsHandler)}: {JsonSerializer.Serialize(request)}");
 
-                var candlesticks = await _candlestickService.GetCandlesticksAsync(request.Symbol, request.Timeframe, request.StartDate, request.EndDate);
+                var candlesticks = await _candlestickService.GetCandlesticksAsync(request.Symbol, request.Timeframe, request.StartDateTime, request.EndDateTime);
 
                 if (candlesticks == null || !candlesticks.Any())
                 {
@@ -59,22 +59,18 @@ namespace PricePrediction.Application.TradeSignals.Handler
                 var signals = GenerateTradeSignals(candlesticks, shortMA, longMA);
                 if (signals.Any())
                 {
-                    var indicatorType = $"MA {request.ShortPeriod}-{request.LongPeriod}";
+                    var indicatorType = $"EMA {request.ShortPeriod}-{request.LongPeriod}";
 
                     var existingSignals = await _repository.GetAsync(
                         predicate: t => t.Symbol == request.Symbol &&
                                         t.Timeframe == request.Timeframe &&
                                         t.IndicatorType == indicatorType &&
                                         signals.Select(s => s.Timestamp).Contains(t.Timestamp),
-                        orderBy: x => x.OrderBy(y => y.Timestamp),
-                        pageNumber: 1,
-                        pageSize: 1000);
+                        orderBy: x => x.OrderBy(y => y.Timestamp));
 
                     var existingTimestamps = existingSignals.Select(t => t.Timestamp).ToHashSet();
 
-                    var newSignals = signals
-                        .Where(s => !existingTimestamps.Contains(s.Timestamp)) // Lọc ra các signal chưa có trong DB
-                        .ToList();
+                    var newSignals = signals.Where(s => !existingTimestamps.Contains(s.Timestamp)).ToList();
 
                     if (newSignals.Any())
                     {
@@ -85,7 +81,31 @@ namespace PricePrediction.Application.TradeSignals.Handler
                             s.Timeframe = request.Timeframe;
                         });
 
+                        //  thường ở tín hiệu cuối cùng nó chưa có đóng lệnh vì chưa đủ data
+                        var lastOpenTrade = existingSignals
+                            .Where(t => t.Symbol == request.Symbol &&
+                                    t.Timeframe == request.Timeframe &&
+                                    t.IndicatorType == indicatorType &&
+                                    (t.Signal == "BUY" || t.Signal == "SHORT"))
+                            .OrderByDescending(t => t.Timestamp)
+                            .FirstOrDefault();
+
+                        if (lastOpenTrade != null)
+                        {
+                            // Duyệt qua tất cả lệnh đóng trong signalsEntity để gán đúng TradeId
+                            foreach (var s in signalsEntity.Where(t => t.Signal == "SELL" || t.Signal == "COVER"))
+                            {
+                                s.TradeId = lastOpenTrade.TradeId;
+                            }
+                        }
+
                         await _repository.AddRangeAsync(signalsEntity);
+
+                        // Sau khi lưu thành công, lấy open trade cuối cùng kết hợp với lệnh đầu tiên (nó sẽ cùng TradeId với nhau) để gửi qua TradeResults
+                        if (lastOpenTrade != null)
+                        {
+                            signalsEntity.Insert(0, lastOpenTrade);
+                        }
 
                         // TODO: move to post-processor
                         await _mediator.Send(new AddTradeResultsCommand
@@ -95,7 +115,7 @@ namespace PricePrediction.Application.TradeSignals.Handler
                     }
                 }
 
-                return BaseResponse<List<TradeSignalResponse>>.Success(signals);
+                return BaseResponse<List<TradeSignalResponse>>.Success(new List<TradeSignalResponse>());
             }
             catch (Exception ex)
             {

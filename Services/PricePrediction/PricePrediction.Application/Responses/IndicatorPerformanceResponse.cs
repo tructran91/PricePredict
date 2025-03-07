@@ -11,5 +11,7 @@
         public double WinRate { get; set; }
 
         public decimal AverageProfit { get; set; }
+
+        public decimal TotalProfit { get; set; }
     }
 }
