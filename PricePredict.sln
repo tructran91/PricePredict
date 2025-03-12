@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PricePrediction.Core", "Ser
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PricePrediction.API", "Services\PricePrediction\PricePrediction.API\PricePrediction.API.csproj", "{D93AC9C7-B401-4CD5-8E08-7D966603EC98}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PricePredict.Web", "Web\PricePredict.Web\PricePredict.Web.csproj", "{9A691906-B988-47E3-A760-07A3721E606F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{D93AC9C7-B401-4CD5-8E08-7D966603EC98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D93AC9C7-B401-4CD5-8E08-7D966603EC98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D93AC9C7-B401-4CD5-8E08-7D966603EC98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A691906-B988-47E3-A760-07A3721E606F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A691906-B988-47E3-A760-07A3721E606F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A691906-B988-47E3-A760-07A3721E606F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A691906-B988-47E3-A760-07A3721E606F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,5 +95,6 @@ Global
 		{AE6B8157-F4EA-4561-91E5-288D6A54A9D9} = {86C578D2-D3A1-4CAF-8D35-2D3E09F1F37D}
 		{674DF02E-8E2B-4D2A-9271-D31E361F7726} = {86C578D2-D3A1-4CAF-8D35-2D3E09F1F37D}
 		{D93AC9C7-B401-4CD5-8E08-7D966603EC98} = {86C578D2-D3A1-4CAF-8D35-2D3E09F1F37D}
+		{9A691906-B988-47E3-A760-07A3721E606F} = {A60DBAC0-4FAB-4C35-B5F8-70F81A8DCAED}
 	EndGlobalSection
 EndGlobal

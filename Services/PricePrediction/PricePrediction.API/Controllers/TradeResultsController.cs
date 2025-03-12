@@ -19,7 +19,7 @@ namespace PricePrediction.API.Controllers
         public async Task<IActionResult> GetTradeResults([FromQuery] GetTradeResultsQuery query)
         {
             var result = await _mediator.Send(query);
-            return Ok(new { Prediction = result });
+            return Ok(result);
         }
     }
 }

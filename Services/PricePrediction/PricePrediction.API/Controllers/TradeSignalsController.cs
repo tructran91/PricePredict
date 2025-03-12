@@ -20,14 +20,14 @@ namespace PricePrediction.API.Controllers
         public async Task<IActionResult> GetTradeSignals([FromQuery] GetTradeSignalsQuery query)
         {
             var result = await _mediator.Send(query);
-            return Ok(new { Prediction = result });
+            return Ok(result);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddTradeSignals([FromQuery] AddTradeSignalsCommand command)
         {
             var result = await _mediator.Send(command);
-            return Ok(new { Prediction = result });
+            return Ok(result);
         }
     }
 }

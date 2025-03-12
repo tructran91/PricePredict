@@ -1,0 +1,96 @@
+﻿@page "/indicator/ema"
+@using BlazorTable
+@using PricePredict.Web.Constants
+@using PricePredict.Web.Models.Business.Indicator
+@using PricePredict.Web.Shared.Components
+@using BlazorDateRangePicker
+@using ApexCharts
+
+<PageTitle>EMA Indicator</PageTitle>
+
+<Breadcrumb Title="EMA Indicator" BreadcrumbItems="breadcrumb"></Breadcrumb>
+
+<div class="card">
+    <div class="row px-4 py-3 border-bottom">
+        <div class="col-md-3">
+            <div class="row align-items-center">
+                <label class="form-label col-sm-3 col-form-label">Symbol</label>
+                <div class="col-sm-9">
+                    <select class="form-select" @bind="selectedSymbol">
+                        <option selected value="BTCUSDT">BTC/USDT</option>
+                        <option value="ETHUSDT">ETH/USDT</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="row align-items-center">
+                <label class="form-label col-sm-3 col-form-label">Date range</label>
+                <div class="col-sm-9">
+                    <DateRangePicker class="form-control"
+                                     placeholder="From Date => To Date"
+                                     StartDate="@startDate"
+                                     EndDate="@endDate"
+                                     OnRangeSelect="@HandleRangeSelect" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="row align-items-center">
+                <label class="form-label col-sm-3 col-form-label">Timeframe</label>
+                <div class="col-sm-9">
+                    <select class="form-select" @bind="selectedTimeframe">
+                        <option selected value="1m">1m</option>
+                        <option value="5m">5m</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="justify-content-center d-flex align-items-center btn btn-rounded btn-primary" @onclick="SearchClicked">
+                <i class="ti ti-search fs-5 me-2"></i>
+                Search
+            </button>
+        </div>
+    </div>
+</div>
+
+@if (isLoading)
+{
+    <Loading></Loading>
+}
+else
+{
+    if (signalsResult.Count == 0)
+    {
+        <Alert Content="@SystemMessages.NoData"></Alert>
+    }
+    else
+    {
+        <ApexChart TItem="DailyPerformanceModel"
+                   @ref="_chartRef"
+                   Options="_chartOptions"
+                   Title="EMA Performance by Day"
+                   Height="400">
+            @foreach (var indicator in signalsResult)
+            {
+                <ApexPointSeries TItem="DailyPerformanceModel"
+                                 Items="@indicator.DailyResults"
+                                 Name="@indicator.IndicatorType"
+                                 SeriesType="SeriesType.Line"
+                                 XValue="@(e => e.Date.ToString("yyyy-MM-dd"))"
+                                 YValue="@(e => e.TotalProfit)" />
+            }
+        </ApexChart>
+
+        @* <Table TableItem="IndicatorPerformanceModel" Items="signalsResult" PageSize="10" TableBodyClass="align-middle">
+            <Column TableItem="IndicatorPerformanceModel" Title="Indicator Type" Field="@(x => x.IndicatorType)" Sortable="true" Filterable="true" />
+            <Column TableItem="IndicatorPerformanceModel" Title="Total Trades" Field="@(x => x.TotalTrades)" Sortable="true" Filterable="true" />
+            <Column TableItem="IndicatorPerformanceModel" Title="Win Trades" Field="@(x => x.WinTrades)" Sortable="true" Filterable="true" />
+            <Column TableItem="IndicatorPerformanceModel" Title="Win Rate" Field="@(x => x.WinRate)" Sortable="true" Filterable="true" />
+            <Column TableItem="IndicatorPerformanceModel" Title="Average Profit" Field="@(x => x.AverageProfit)" Sortable="true" Filterable="true" />
+            <Column TableItem="IndicatorPerformanceModel" Title="Total Profit" Field="@(x => x.TotalProfit)" Sortable="true" Filterable="true" />
+            <Pager ShowPageNumber="true" ShowTotalCount="true" />
+        </Table> *@
+    }
+}
