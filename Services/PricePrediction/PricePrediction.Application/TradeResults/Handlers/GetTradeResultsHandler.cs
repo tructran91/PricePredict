@@ -26,7 +26,7 @@ namespace PricePrediction.Application.TradeResults.Handlers
         {
             var results = await _repository.GetTradeResultsAsync(request.Symbol, request.Timeframe, request.StartDateTime, request.EndDateTime, request.IndicatorType);
 
-            var performance = results
+            var dailyPerformance = results
                 .GroupBy(tr => new { tr.IndicatorType, tr.Timestamp.Date })
                 .Select(group => new DailyPerformance
                 {
@@ -44,7 +44,18 @@ namespace PricePrediction.Application.TradeResults.Handlers
                 })
                 .ToList();
 
-            return BaseResponse<List<IndicatorPerformanceResponse>>.Success(performance);
+            var totalPerformance = results
+                .GroupBy(tr => tr.IndicatorType)
+                .Select(g => new IndicatorPerformanceResponse
+                {
+                    IndicatorType = g.Key,
+                    TotalWinRate = Math.Round(g.Count(tr => tr.IsWin) / (double)g.Count() * 100, 2),
+                    TotalProfit = Math.Round(g.Sum(tr => tr.Profit), 2)
+                })
+                .ToList();
+
+
+            return BaseResponse<List<IndicatorPerformanceResponse>>.Success(dailyPerformance);
         }
     }
 }
